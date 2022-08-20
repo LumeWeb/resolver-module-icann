@@ -43,7 +43,7 @@ export default class Icann extends AbstractResolverModule {
 
       if (ret && ret.length > 0) {
         let type =
-          isDomain(ret) && !isIp(domain)
+          isDomain(ret) && !isIp(ret)
             ? DNS_RECORD_TYPE.CNAME
             : DNS_RECORD_TYPE.A;
         records.push({ type, value: ret });
