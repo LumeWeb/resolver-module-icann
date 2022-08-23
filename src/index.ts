@@ -20,7 +20,7 @@ export default class Icann extends AbstractResolverModule {
       return resolverEmptyResponse();
     }
 
-    if (!isDomain(domain)) {
+    if (isIp(domain)) {
       return resolverEmptyResponse();
     }
 
