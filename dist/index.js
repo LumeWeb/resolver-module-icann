@@ -4,7 +4,7 @@ export default class Icann extends AbstractResolverModule {
         if (!(options.options && "subquery" in options.options)) {
             return resolverEmptyResponse();
         }
-        if (!isDomain(domain)) {
+        if (isIp(domain)) {
             return resolverEmptyResponse();
         }
         const records = [];
@@ -16,7 +16,7 @@ export default class Icann extends AbstractResolverModule {
             const query = this.resolver.rpcNetwork.query("dnslookup", "icann", data, bypassCache);
             const ret = await query.result;
             if (ret && ret.length > 0) {
-                let type = isDomain(ret) && !isIp(domain)
+                let type = isDomain(ret) && !isIp(ret)
                     ? DNS_RECORD_TYPE.CNAME
                     : DNS_RECORD_TYPE.A;
                 records.push({ type, value: ret });
