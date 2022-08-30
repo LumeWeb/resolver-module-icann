@@ -13,13 +13,16 @@ export default class Icann extends AbstractResolverModule {
                 domain,
                 nameserver: options?.options?.nameserver ?? undefined,
             };
-            const query = this.resolver.rpcNetwork.query("dnslookup", "icann", data, bypassCache);
+            const query = this.resolver.rpcNetwork.wisdomQuery("resolve", "dns", data, bypassCache);
             const ret = await query.result;
-            if (ret && ret.length > 0) {
-                let type = isDomain(ret) && !isIp(ret)
+            if (ret.error) {
+                throw new Error(ret.error);
+            }
+            if (ret.data.length > 0) {
+                let type = isDomain(ret.data) && !isIp(ret.data)
                     ? DNS_RECORD_TYPE.CNAME
                     : DNS_RECORD_TYPE.A;
-                records.push({ type, value: ret });
+                records.push({ type, value: ret.data });
             }
         }
         if (0 < records.length) {
